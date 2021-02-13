@@ -1,0 +1,3 @@
+[submodule "DownpatcherSharp"]
+	path = DownpatcherSharp
+	url = https://github.com/FromDarkHell/DownpatcherSharp.git
