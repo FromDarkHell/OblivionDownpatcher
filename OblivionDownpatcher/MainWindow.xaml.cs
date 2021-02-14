@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
 using AdonisUI.Controls;
+using System.Windows.Input;
 using OblivionDownpatcher.NoCD;
 using OblivionDownpatcher.Downpatcher;
-using System.Windows.Input;
+using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog; // This is done to avoid naming conficts, its real ugly :)
 
 namespace OblivionDownpatcher {
     /// <summary>
@@ -87,18 +88,55 @@ namespace OblivionDownpatcher {
             UpdateVersionLabel();
 
             Mouse.OverrideCursor = null;
+
+            string patch = gameInstance.getCurrentPatch();
+            bool askForNoCD = (patch.StartsWith("1.0") && !patch.EndsWith(" (No CD)"));
+            if (askForNoCD) {
+                var messageBox = new MessageBoxModel {
+                    Text = "Patching complete!\nDo you want to apply the No CD edit?",
+                    Caption = "Info",
+                    Icon = MessageBoxImage.Question,
+                    IsSoundEnabled = true,
+                    Buttons = MessageBoxButtons.YesNo()
+                };
+                var result = MessageBox.Show(messageBox);
+                if(result == MessageBoxResult.Yes) // Click the button if the user said yes
+                    ApplyCDFix_Click(null, new System.Windows.RoutedEventArgs());
+            }
+            else {
+                var messageBox = new MessageBoxModel {
+                    Text = "Patching complete!",
+                    Caption = "Info",
+                    Icon = MessageBoxImage.Information,
+                    IsSoundEnabled = true,
+                    Buttons = new[] { MessageBoxButtons.Ok() }
+                };
+                MessageBox.Show(messageBox);
+            }
+        }
+
+        private void Info_Click(object sender, System.Windows.RoutedEventArgs e) {
             var messageBox = new MessageBoxModel {
-                Text = "Patching complete!",
+                Text = "Made by: FromDarkHell\nSee https://fromdarkhell.github.io/Oblivion for more info",
                 Caption = "Info",
                 Icon = MessageBoxImage.Information,
-                IsSoundEnabled = true,
                 Buttons = new[] { MessageBoxButtons.Ok() }
             };
             MessageBox.Show(messageBox);
+
         }
+
 
         #endregion
 
-
+        private void GamePathBox_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog()) {
+                dialog.ShowNewFolderButton = false;
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK) {
+                    GamePathBox.Text = dialog.SelectedPath;
+                }
+            }
+        }
     }
 }
