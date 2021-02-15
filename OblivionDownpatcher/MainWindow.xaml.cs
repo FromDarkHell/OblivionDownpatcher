@@ -113,6 +113,8 @@ namespace OblivionDownpatcher {
                 };
                 MessageBox.Show(messageBox);
             }
+
+            gameInstance.ApplyINIFix(); // Modify the INI to write to the patched directory.
         }
 
         private void Info_Click(object sender, System.Windows.RoutedEventArgs e) {
