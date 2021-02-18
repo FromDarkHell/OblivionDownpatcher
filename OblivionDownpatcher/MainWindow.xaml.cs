@@ -22,6 +22,7 @@ namespace OblivionDownpatcher {
                 foreach(string p in gameInstance.getPatches()) {
                     PatchBox.Items.Add(p);
                 }
+                PatchBox.SelectedIndex = 0;
             }
             catch(Exception ex) {
                 var messageBox = new MessageBoxModel {
@@ -38,11 +39,7 @@ namespace OblivionDownpatcher {
         public void UpdateVersionLabel() { 
             string patch = gameInstance.getCurrentPatch();
             VersionLabel.Content = patch;
-            if(!patch.StartsWith("1.0")) { // No CD Fix only matters on 1.0
-                ApplyCDFix.IsEnabled = false;
-            } else {
-                ApplyCDFix.IsEnabled = patch.EndsWith(" (No CD)") ? false : true;
-            }
+            ApplyCDFix.IsEnabled = NoCDPatcher.CanApplyCDPatch(Path.Combine(gameInstance.gameDir.FullName, "Oblivion.exe"));
         }
 
         #region Events
@@ -71,7 +68,6 @@ namespace OblivionDownpatcher {
             }
         }
 
-
         private void ApplyCDFix_Click(object sender, System.Windows.RoutedEventArgs e) {
             Mouse.OverrideCursor = Cursors.Wait;
 
@@ -81,6 +77,7 @@ namespace OblivionDownpatcher {
 
             Mouse.OverrideCursor = null;
         }
+        
         private void PatchButton_Click(object sender, System.Windows.RoutedEventArgs e) {
             Mouse.OverrideCursor = Cursors.Wait;
 
@@ -90,7 +87,7 @@ namespace OblivionDownpatcher {
             Mouse.OverrideCursor = null;
 
             string patch = gameInstance.getCurrentPatch();
-            bool askForNoCD = (patch.StartsWith("1.0") && !patch.EndsWith(" (No CD)"));
+            bool askForNoCD = (NoCDPatcher.CanApplyCDPatch(Path.Combine(gameInstance.gameDir.FullName, "Oblivion.exe")) && !patch.EndsWith(" (No CD)"));
             if (askForNoCD) {
                 var messageBox = new MessageBoxModel {
                     Text = "Patching complete!\nDo you want to apply the No CD edit?",
@@ -128,9 +125,6 @@ namespace OblivionDownpatcher {
 
         }
 
-
-        #endregion
-
         private void GamePathBox_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             using (FolderBrowserDialog dialog = new FolderBrowserDialog()) {
                 dialog.ShowNewFolderButton = false;
@@ -140,5 +134,21 @@ namespace OblivionDownpatcher {
                 }
             }
         }
+
+        private void HelpButton_Click(object sender, System.Windows.RoutedEventArgs e) {
+            string hashLocation = "";
+            var patch = (string)PatchBox.SelectedItem;
+            switch (patch) {
+                case "1.1.425 (Beta)":
+                    hashLocation = "#Version_1.1.425_.28Beta.29";
+                    break;
+                case "1.1.511":
+                    hashLocation = "#Version_1.1.511";
+                    break;
+            }
+            System.Diagnostics.Process.Start("https://en.uesp.net/wiki/Oblivion:Patch" + hashLocation);
+        }
+
+        #endregion
     }
 }

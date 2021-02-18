@@ -9,22 +9,17 @@ namespace OblivionDownpatcher.Downpatcher {
         public Oblivion(string filePath, string gameName) : base(filePath, gameName) { }
         public override string getCurrentPatch() {
             try {
-                var version = FileVersionInfo.GetVersionInfo(Path.Combine(gameDir.FullName, "Oblivion.exe"));
+                string exePath = Path.Combine(gameDir.FullName, "Oblivion.exe");
+
+                var version = FileVersionInfo.GetVersionInfo(exePath);
                 string fullVer = version.ProductVersion;
-                switch(version.ProductVersion) {
-                    case "1.0.228":
-                        fullVer = "1.0";
-                        fullVer += (NoCDPatcher.IsCDPatched(Path.Combine(gameDir.FullName, "Oblivion.exe")) ? " (No CD)" : " (CD)");
-                        break;
-                    case "1.2.0416":
-                        fullVer = "1.2";
-                        break;
-                }
+
+                if (NoCDPatcher.CanApplyCDPatch(exePath))
+                    fullVer += (NoCDPatcher.IsCDPatched(exePath) ? " (No CD)" : " (CD)");
+
                 return fullVer;
             }
-            catch(Exception ex) {
-                return "Unknown";
-            }
+            catch (Exception) { return "Unknown"; }
         }
 
         public void ApplyINIFix() {

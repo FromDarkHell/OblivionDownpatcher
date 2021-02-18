@@ -8,7 +8,7 @@
         xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
         xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
         xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
-        Title="Oblivion Downpatcher" Height="165" Width="425" MinHeight="165" MinWidth="425">
+        Title="Oblivion Downpatcher" Height="165" Width="449" MinHeight="165" MinWidth="425">
     <Window.Style>
         <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
     </Window.Style>
@@ -25,12 +25,13 @@
     <Grid>
         <Button Content="Patch Game" Margin="0,0,10,13" VerticalAlignment="Bottom" RenderTransformOrigin="0.81,0.583" HorizontalAlignment="Right" Width="105" Name="PatchButton" Click="PatchButton_Click"/>
         <Label Content="Patch: " Margin="10,25,0,0" VerticalAlignment="Top" Height="15" RenderTransformOrigin="0.5,1.333" HorizontalAlignment="Left" Width="40"/>
-        <ComboBox Margin="0,20,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="351" Name="PatchBox"/>
+        <ComboBox Margin="0,20,41,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="320" Name="PatchBox"/>
         <Label Content="Version: " HorizontalAlignment="Left" Margin="10,0,0,18" VerticalAlignment="Bottom" Width="55" Height="15" RenderTransformOrigin="0.5,1.333"/>
-        <Label Content="Unknown" Margin="70,0,0,18" VerticalAlignment="Bottom" Height="15" RenderTransformOrigin="0.5,1.333" HorizontalAlignment="Left" Width="85" Name="VersionLabel"/>
-        <Button Content="Apply No CD Fix" Margin="0,0,152,13" VerticalAlignment="Bottom" RenderTransformOrigin="0.81,0.583" HorizontalAlignment="Right" Width="105" Name="ApplyCDFix" Click="ApplyCDFix_Click"/>
+        <Label Content="Unknown" Margin="70,0,0,18" VerticalAlignment="Bottom" Height="15" RenderTransformOrigin="0.5,1.333" HorizontalAlignment="Left" Width="115" Name="VersionLabel"/>
+        <Button Content="Apply No CD Fix" Margin="0,0,136,13" VerticalAlignment="Bottom" RenderTransformOrigin="0.81,0.583" HorizontalAlignment="Right" Width="105" Name="ApplyCDFix" Click="ApplyCDFix_Click"/>
         <Label Content="Game Location: " Margin="10,65,0,0" VerticalAlignment="Top" Height="15" RenderTransformOrigin="0.5,1.333" HorizontalAlignment="Left" Width="95"/>
         <TextBox HorizontalAlignment="Right" Height="23" Margin="0,61,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="302" TextChanged="GamePath_TextChanged" Name="GamePathBox" MouseDoubleClick="GamePathBox_MouseDoubleClick" adonisExtensions:WatermarkExtension.Watermark="Game Path"/>
+        <Button Content="?" Margin="0,20,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.81,0.583" HorizontalAlignment="Right" Width="21" x:Name="HelpButton" Click="HelpButton_Click"/>
 
     </Grid>
 

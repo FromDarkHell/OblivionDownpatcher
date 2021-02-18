@@ -31,6 +31,23 @@ namespace OblivionDownpatcher.NoCD {
         public static byte[] PatchedCDROM =   { 0x90, 0x90, 0xE9, 0x98, 0x00, 0x00, 0x00, 0x90 };
         public static byte[] PatchedCDCheck = { 0x90, 0x90, 0xE9, 0xB6, 0x00, 0x00, 0x00, 0x90 };
 
+        public static bool CanApplyCDPatch(string filePath) {
+            byte[] exe = File.ReadAllBytes(filePath);
+            int index = BytesFinder.FindIndex(exe, UnpatchedCDROMSignature);
+            if(index == -1) {
+                int i2 = BytesFinder.FindIndex(exe, PatchedCDROMSignature);
+                if (i2 == -1) return false; // Unable to find either the unpatched version or the patched version
+            }
+
+            index = BytesFinder.FindIndex(exe, UnpatchedCDCheckSignature);
+            if(index == -1) {
+                int i2 = BytesFinder.FindIndex(exe, PatchedCDCheckSignature);
+                if (i2 == -1) return false;
+            }
+
+            return true;
+        }
+
         public static bool IsCDPatched(string filePath) {
             byte[] exe = File.ReadAllBytes(filePath);
             int index = BytesFinder.FindIndex(exe, PatchedCDROMSignature);
@@ -67,6 +84,7 @@ namespace OblivionDownpatcher.NoCD {
                 File.WriteAllBytes(filepath, exe); // Patch the current exe
             }
             else {
+                // TODO: If the backup doesn't exist, we should properly undo the hex-edits
                 if (File.Exists(filepath + ".bak")) {
                     File.Delete(filepath);
                     File.Move(filepath + ".bak", filepath);
